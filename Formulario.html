@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title style="color: white">Generador de Usuario y Contraseña</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        min-height: 100%;
+        overflow: hidden;
+      }
+      .container {
+        background-color: rgba(245, 161, 39, 0.8);
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 480px;
+        padding: 30px;
+        text-align: center;
+        box-sizing: border-box;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      input[type="text"],
+      input[type="submit"] {
+        width: 100%;
+        padding: 8px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        justify-content: center;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #e9ffe9;
+        border: 1px solid #b3ffb3;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 style="color: white">Generador de Usuario y Contraseña</h1>
+
+      <form id="form">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" required />
+
+        <label for="rut">RUT</label>
+        <input type="text" id="rut" required placeholder="Ej: 12345678-9" />
+
+        <input type="submit" value="Generar Usuario y Contraseña" />
+      </form>
+
+      <div class="result" id="result" style="display: none">
+        <p><strong>Tu Usuario es:</strong> <span id="usuario"></span></p>
+        <p><strong>Tu Contraseña es:</strong> <span id="contraseña"></span></p>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // Obtener los valores de los campos
+          const nombre = document.getElementById("nombre").value.trim();
+          const rut = document.getElementById("rut").value.trim();
+
+          // Validación de nombre y RUT
+          if (!nombre || !rut || !/^\d{7,8}-[0-9Kk]$/.test(rut)) {
+            alert("Por favor ingresa un nombre y un RUT válido.");
+            return;
+          }
+
+          // Procesar nombre
+          const nombreFormateado =
+            nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase();
+
+          // Extraer los últimos 3 dígitos del RUT y el dígito verificador
+          const rutPartes = rut.split("-");
+          const rutNumerico = rutPartes[0];
+          const digitoVerificador = rutPartes[1].toUpperCase();
+
+          // Últimos 3 dígitos del RUT
+          const ultimosTres = rutNumerico.slice(-3);
+
+          // Generar Usuario
+          const usuario = `${nombreFormateado}-${ultimosTres}-5`;
+
+          // Generar Contraseña
+          const contraseña = rutNumerico.replace(/[^0-9]/g, ""); // Eliminar cualquier letra del RUT
+
+          // Mostrar los resultados
+          document.getElementById("usuario").textContent = usuario;
+          document.getElementById("contraseña").textContent = contraseña;
+          document.getElementById("result").style.display = "block";
+        });
+    </script>
+  </body>
+</html>
